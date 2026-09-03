@@ -1,0 +1,64 @@
+| Area                | Library               | Purpose                                                                       |
+| ------------------- | --------------------- | ----------------------------------------------------------------------------- |
+| Wayland compositor  | **wlroots**           | Compositor infrastructure, backends, rendering abstraction, Wayland protocols |
+| Wayland protocol    | **libwayland-server** | Wayland server/client communication                                           |
+| Input               | **libinput**          | Keyboard, mouse, touchpad, tablet events                                      |
+| GPU/display         | **libdrm**            | DRM/KMS hardware access                                                       |
+| Graphics memory     | **GBM**               | Buffer allocation                                                             |
+| Rendering           | **EGL + OpenGL ES**   | GPU rendering                                                                 |
+| Keyboard            | **xkbcommon**         | Keyboard layouts/keymaps                                                      |
+| Session             | **libseat**           | Access to input/display devices                                               |
+| CPU rendering       | **pixman**            | Software/fallback rendering                                                   |
+| Device discovery    | **libudev**           | Hardware/device events                                                        |
+| X11 compatibility   | **XWayland**          | Running X11 applications                                                      |
+| Protocol extensions | **wayland-protocols** | Standard Wayland extensions                                                   |
+
+
+Wayland itself provides libwayland-server and libwayland-client in C, while the actual compositor implementation is something you build on top.
+
+                 LUMEN
+                   │
+            ┌──────┴──────┐
+            │             │
+       Lumen WM       Lumen Shell
+            │             │
+            └──────┬──────┘
+                   │
+              wlroots
+                   │
+       ┌───────────┼───────────┐
+       │           │           │
+    Wayland      DRM/KMS    libinput
+       │           │           │
+   Clients       GPU       Keyboard/Mouse
+
+
+the stucture i expacted 
+
+src/
+├── compositor/
+│   ├── compositor.c
+│   ├── output.c
+│   ├── surface.c
+│   └── renderer.c
+│
+├── wm/
+│   ├── window.c
+│   ├── workspace.c
+│   ├── tiling.c
+│   ├── floating.c
+│   └── rules.c
+│
+├── input/
+│   ├── keyboard.c
+│   ├── pointer.c
+│   └── shortcuts.c
+│
+├── config/
+│   ├── parser.c
+│   └── config.c
+│
+├── ipc/
+│   └── ipc.c
+│
+└── main.c
